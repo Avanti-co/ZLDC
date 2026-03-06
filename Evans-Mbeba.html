@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <title>The Golden Jubilee | Evans Mbeba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --light-gold: #e2c275;
+            --deep-black: #050505;
+            --soft-white: #f4f4f4;
+            --overlay: rgba(0, 0, 0, 0.75);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--deep-black);
+            color: var(--soft-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(197, 160, 89, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(197, 160, 89, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+        }
+
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .title-wrapper h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .jubilee-tag {
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .content-section {
+            max-width: 1000px;
+            margin: -100px auto 100px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            padding: 4rem 2rem;
+            border-radius: 4px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .grid-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .detail-item h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .dress-code-box {
+            background: linear-gradient(135deg, #111 0%, #000 100%);
+            padding: 2rem;
+            border: 1px solid var(--gold);
+            margin: 2rem 0;
+            display: inline-block;
+            border-radius: 8px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 3rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+        }
+
+        .rsvp-container {
+            margin-top: 4rem;
+        }
+
+        .phone-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn-rsvp {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-rsvp:hover {
+            background: var(--gold);
+            color: var(--deep-black);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+        }
+
+        #countdown {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-top: 2rem;
+        }
+
+        /* --- FLIP CARD ANIMATION --- */
+        .flip-section {
+            margin: 100px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            perspective: 1200px;
+        }
+
+        .flip-card {
+            width: 320px;
+            height: 220px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border: 1px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .face-front {
+            background: #111;
+            color: var(--gold);
+        }
+
+        .face-back {
+            background: #fdfdfd;
+            color: #111;
+            transform: rotateY(180deg);
+            text-align: left;
+            align-items: flex-start;
+        }
+
+        .cal-trigger {
+            margin-top: 15px;
+            display: block;
+            width: 100%;
+            background: var(--deep-black);
+            color: var(--gold);
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cal-trigger:hover {
+            background: var(--gold);
+            color: white;
+        }
+
+        .is-flipped { transform: rotateY(180deg); }
+
+        @media (max-width: 768px) {
+            .content-section { margin-top: 0; padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-mesh"></div>
+
+    <section class="hero">
+        <p class="jubilee-tag">Golden Jubilee Lunch</p>
+        <div class="title-wrapper">
+            <h1 class="gold-text">Evans Mbeba </h1>
+            <p class="jubilee-tag">-- @ 50years --</p>
+        </div>
+        <div id="countdown">Loading...</div>
+    </section>
+
+    <main class="content-section">
+        <p style="font-size: 1.4rem; font-style: italic; color: var(--gold); margin-bottom: 3rem;">
+            "Celebrating fifty years of excellence, family, and grace."
+        </p>
+
+        <div class="grid-details">
+            <div class="detail-item">
+                <h3>Date</h3>
+                <p>Saturday, 28th March 2026</p>
+                <p>Commencing at 12:30 PM</p>
+            </div>
+<div class="gifting">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold);">Gifting</h3>
+            <p style="margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Your presence is our greatest gift. However, should you wish to honor Evans with a token, 
+                a monetary gift would be sincerely appreciated.
+            </p>
+        </div>
+          
+            <div class="detail-item">
+                <h3>Dress Code</h3>
+                <div class="dress-code-box">
+                    <span style="color: #fff">BLACK</span> & <span style="color: var(--gold)">GOLD</span>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(197, 160, 89, 0.2); margin: 3rem 0;">
+
+          <div class="detail-item">
+                <h3>Location</h3>
+                <p>Eagles View Event Centre</p>
+                <p>Lusaka, Zambia</p>
+            </div>
+
+        <div class="map-container">
+            <iframe 
+    width="100%" 
+    height="100%" 
+    frameborder="0" 
+    scrolling="no" 
+    marginheight="0" 
+    marginwidth="0" 
+    src="https://maps.google.com/maps?q=Eagles%20View%20Event%20Centre%20Lusaka&t=k&z=15&ie=UTF8&iwloc=&output=embed">
+</iframe>
+        </div>
+
+        <div class="rsvp-container">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem;">RSVP</h3>
+            <p style="opacity: 0.7;">Please confirm your attendance</p>
+            <div class="phone-links">
+               <a href="https://wa.me/260977409815?text=Hello%2C%20I%E2%80%99m%20confirming%20my%20attendance%20for%20Evans%20Mbeba%E2%80%99s%20Golden%20Jubilee%20Lunch" class="btn-rsvp">
+0977 409 815
+</a>
+
+<a href="https://wa.me/260977431614?text=Hello%2C%20I%E2%80%99m%20confirming%20my%20attendance%20for%20Evans%20Mbeba%E2%80%99s%20Golden%20Jubilee%20Lunch" class="btn-rsvp">
+0977 431 614
+</a>
+
+<a href="https://wa.me/260973203537?text=Hello%2C%20I%E2%80%99m%20confirming%20my%20attendance%20for%20Evans%20Mbeba%E2%80%99s%20Golden%20Jubilee%20Lunch" class="btn-rsvp">
+0973 203 537
+</a>
+            </div>
+        </div>
+
+        <div class="flip-section" id="flip-trigger">
+            <div class="flip-card">
+                <div class="flip-card-inner" id="card-inner">
+                    <div class="face face-front">
+                        <h2 style="font-family: 'Playfair Display', serif; letter-spacing: 4px;">INVITATION</h2>
+                    </div>
+                    <div class="face face-back" id="capture-area">
+                        <p style="color: #c5a059; font-weight: bold; margin-bottom: 10px; font-family: 'Inter', sans-serif;">INVITATION SUMMARY</p>
+                        <p style="font-size: 0.8rem; line-height: 1.5; font-family: 'Inter', sans-serif;">
+                            <strong>Evans Mbeba's Golden Jubilee</strong><br>
+                        Date: 28 March 2026 | 12:30 PM<br>
+                            Location: Eagles View, Lusaka<br>
+                            Dress code: Black & Gold
+                        </p>
+                        <button onclick="addToCalendar()" class="cal-trigger">SAVE TO CALENDAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 4rem; opacity: 0.5; font-size: 0.8rem; letter-spacing: 2px;">
+        EST. 1976 — 2026 | THE GOLDEN JUBILEE
+    </footer>
+
+<style>
+footer.site-footer{
+  margin-top:48px;
+  background:linear-gradient(180deg,#081223,#07162a);
+border-top: 1px solid #9bd6ff;
+
+  color:#97a9bf;
+  padding:48px 20px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  max-width:1100px;
+  margin:auto;
+}
+
+.footer-brand{
+  color:white;
+  font-weight:800;
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.avanti-info{
+  grid-column:span 2;
+  column-count:2;
+  column-gap:30px;
+}
+
+.footer-bottom{
+  grid-column:span 2;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+}
+
+.footer-links{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.footer-links a{
+  color:#97a9bf;
+  text-decoration:none;
+  transition:0.2s;
+}
+
+.footer-links a:hover{
+  color:#9bd6ff;
+}
+
+.socials{
+  margin-top:12px;
+}
+
+.legal{
+  margin-top:16px;
+  font-size:13px;
+  color:#6f8296;
+}
+
+@media(max-width:700px){
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .avanti-info{
+    column-count:1;
+  }
+
+  .footer-bottom{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+
+
+
+<footer class="site-footer">
+
+<div class="footer-grid">
+
+<!-- AVANTI INFO -->
+<div class="avanti-info">
+
+<div>
+<div style="display:flex; align-items:center; gap:14px; break-inside:avoid; margin-bottom:10px;">
+
+  <img src="https://ik.imagekit.io/3mtmeexff/IMG_8590.jpeg?updatedAt=1755948361293"
+       alt="Avanti logo"
+       style="width:50px; height:50px; object-fit:cover; border-radius:10px;">
+
+  <div>
+    <div class="footer-brand">Avanti</div>
+    <div style="color:#cfe7ff;">Design. Develop. Evolve.</div>
+  </div>
+
+</div>
+</div>
+
+<div>
+Avanti builds easy-to-use digital tools and websites for people and businesses.
+We design in plain language and deliver reliable systems that help organisations
+work smarter and grow online.
+</div>
+
+<div class="socials">
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20to%20request%20a%20digital%20service.%20Could%20you%20create%20something%20for%20me%3F"
+style="color:#9bd6ff;text-decoration:none;">
+Request a Service
+</a>
+</div>
+
+</div>
+
+
+<!-- TWO COLUMN SECTION -->
+<div class="footer-bottom">
+
+<!-- GET IN TOUCH -->
+<div>
+
+<div style="font-weight:700;color:#fff;margin-bottom:10px">
+Get in touch
+</div>
+
+<div>Email: mweshaba@icloud.com</div>
+
+<div style="margin-top:8px">
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20to%20request%20a%20digital%20service.%20Could%20you%20create%20something%20for%20me%3F"
+style="color:#97a9bf;text-decoration:none;">
+WhatsApp: +260 766 512 632
+</a>
+</div>
+
+<div style="margin-top:8px">
+Location: Lusaka, Zambia
+</div>
+
+<div class="legal">
+© 2025 Avanti. All rights reserved.
+</div>
+
+</div>
+
+
+<!-- SERVICES -->
+<div>
+
+<div style="font-weight:700;color:#fff;margin-bottom:10px">
+Services
+</div>
+
+<div class="footer-links">
+
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20a%20website%20profile%20or%20portfolio.">
+Web profiles & portfolios
+</a>
+
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20an%20e-commerce%20website.">
+Shop & e-commerce
+</a>
+
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20to%20request%20a%20custom%20digital%20tool.">
+Request a custom tool
+</a>
+
+<a href="https://wa.me/260766512632?text=Hello%2C%20I%20would%20like%20to%20know%20how%20your%20process%20works.">
+How we work
+</a>
+
+<a href="https://wa.me/260766512632?text=Hello%2C%20can%20I%20see%20examples%20of%20your%20projects.">
+Our clients (Project examples)
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div style="max-width:1100px;margin:25px auto 0;color:#6f8296;font-size:13px;">
+<strong>Accessibility & clarity:</strong>
+This web portfolio was created using Avanti.
+If you need help, message us on WhatsApp and we will guide you step-by-step.
+</div>
+
+</footer>
+    <script>
+        /**
+         * Generates and downloads an .ics file
+         * This format is supported by iOS, Android, and Desktop
+         */
+        function addToCalendar() {
+            const event = {
+                title: "Evans Mbeba's The Golden Jubilee Lunch",
+                description: "Celebrating 50 years of Evans Mbeba. Dress Code: Black & Gold.",
+                location: "Eagles View Event Centre, Lusaka, Zambia",
+                begin: "20260328T123000", // YYYYMMDDTHHMMSS
+                end: "20260328T170000"
+            };
+
+            const icsData = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "BEGIN:VEVENT",
+                `DTSTART:${event.begin}`,
+                `DTEND:${event.end}`,
+                `SUMMARY:${event.title}`,
+                `DESCRIPTION:${event.description}`,
+                `LOCATION:${event.location}`,
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\n");
+
+            const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'Evans_Mbeba_Jubilee.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Intersection Observer for Scroll Trigger
+        const card = document.getElementById('card-inner');
+        const trigger = document.getElementById('flip-trigger');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    card.classList.add('is-flipped');
+                } else {
+                    card.classList.remove('is-flipped');
+                }
+            });
+        }, { threshold: 0.7 });
+
+        observer.observe(trigger);
+
+        // Precision Countdown
+        const targetDate = new Date("March 28, 2026 12:30:00").getTime();
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
+            
+            if (gap < 0) {
+                document.getElementById("countdown").innerText = "THE CELEBRATION HAS BEGUN";
+                return;
+            }
+
+            const d = Math.floor(gap / day), h = Math.floor((gap % day) / hour), m = Math.floor((gap % hour) / minute), s = Math.floor((gap % minute) / second);
+            document.getElementById("countdown").innerText = `${d}d : ${h}h : ${m}m : ${s}s`;
+        };
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
