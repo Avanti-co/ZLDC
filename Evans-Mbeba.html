@@ -599,5 +599,67 @@ If you need help, message us on WhatsApp and we will guide you step-by-step.
         setInterval(updateCountdown, 1000);
         updateCountdown();
     </script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+  const trackerConfig = {
+    apiKey: "AIzaSyAw7L6TJtF1W0PwfStEJUC4CebUyMdQU9w",
+    authDomain: "users-66be4.firebaseapp.com",
+    databaseURL: "https://users-66be4-default-rtdb.firebaseio.com",
+    projectId: "users-66be4",
+    storageBucket: "users-66be4.appspot.com",
+    messagingSenderId: "776585122050",
+    appId: "1:776585122050:web:3f452a1f16dc36ee1ef21b"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(trackerConfig);
+  }
+  const db = firebase.database();
+
+  async function trackAvantiUser() {
+    let visitorId = localStorage.getItem('avanti_user_id');
+    const now = new Date();
+    
+    const sessionEntry = {
+      timestamp: now.toISOString(),
+      date: now.toLocaleDateString(),
+      time: now.toLocaleTimeString(),
+      browser: navigator.userAgent.match(/\(([^)]+)\)/)?.[1] || "Unknown",
+      platform: navigator.platform
+    };
+
+    // 1. If no ID exists, increment the global counter and assign a new sequential ID
+    if (!visitorId) {
+      const counterRef = db.ref('analytics/global_stats/user_count');
+      
+      const result = await counterRef.transaction((currentValue) => {
+        return (currentValue || 0) + 1;
+      });
+
+      if (result.committed) {
+        visitorId = `User-${result.snapshot.val()}`;
+        localStorage.setItem('avanti_user_id', visitorId);
+      }
+    }
+
+    // 2. Log activity for the specific User-X
+    if (visitorId) {
+      const userRef = db.ref('analytics/visitors/' + visitorId);
+      
+      userRef.child('viewCount').transaction(c => (c || 0) + 1);
+      userRef.child('lastActive').set(sessionEntry.timestamp);
+      userRef.child('history').push(sessionEntry);
+      
+      // Update global total views
+      db.ref('analytics/global_stats/totalViews').transaction(c => (c || 0) + 1);
+    }
+  }
+
+  trackAvantiUser();
+</script>
+
+
 </body>
 </html>
